@@ -5,16 +5,17 @@ T = 35;
 K = 5;
 g = 981;
 
-h10 = 8;
+h0 = 3.2;
+h10 = 7.2;
 h20 = 7;
-u0 = 1.3;
+u0 = 1;
 
 x0 = [h10; h20];
 P0 = 1*eye(2);
 
 
-Amat = [ -(a*sqrt(2*g))/(2*A*sqrt(h10)) 0 ;
-                 (a*sqrt(2*g))/(2*A*sqrt(h10)) -(a*sqrt(2*g))/(2*A*sqrt(h20))];
+Amat = [ -(a*sqrt(2*g))/(2*A*sqrt(h10+h0)) 0 ;
+                 (a*sqrt(2*g))/(2*A*sqrt(h10+h0)) -(a*sqrt(2*g))/(2*A*sqrt(h20+h0))];
 Bmat = [6.22/A; 0];
 Cmat = [0 1];
 Dmat = zeros(1);
