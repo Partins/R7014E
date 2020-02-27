@@ -5,7 +5,7 @@ K = 5;
 g = 981;
 
 h10 = 10;
-h20 = 10;
+h20 = 9;
 u0 = 1.7;
     
 
@@ -24,8 +24,8 @@ Bmat = [6.22/A; 0];
 
 Cmat = [0 1];
 
-R = eye(2);
-Q = eye(2);
+R = 100%1*eye(2);
+Q = 100*eye(2);
 S = 0;
 
 
@@ -34,7 +34,7 @@ S = 0;
 % P = lyap(Amat, Q); Förmodligen onödig
 
 
-[P,K,L] = icare(Amat,Bmat,Q)  % X = P,
+[P,K,L] = icare(Amat,Bmat,Q, R)  % X = P,
 
 
 
