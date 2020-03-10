@@ -5,12 +5,14 @@ T = 35;
 K = 5;
 g = 981;
 
-h10 = 0.1;
-h20 = 0.1;
+h10 = 10;
+h20 = 10;
+
+Ts = 0.1;
 u0 = 1.7;
 
 x0 = [h10; h20];
-P0 = 1*eye(2);
+P0 = 100*eye(2);
 
 
 Amat = [ -(a*sqrt(2*g))/(2*A*sqrt(h10)) 0 ;
@@ -20,15 +22,17 @@ Cmat = [0 1];
 Dmat = zeros(1);
 
 
-Ts = 1e-1;
-SYS = ss(Amat,Bmat,Cmat,Dmat);
-DSYS = c2d(SYS,Ts);
-
-Amatd = DSYS.A;
-Bmatd = DSYS.B;
-Cmatd = DSYS.C;
-
-
+% Ts = 1e-1;
+% SYS = ss(Amat,Bmat,Cmat,Dmat);
+% DSYS = c2d(SYS,Ts);
+% 
+% Amatd = DSYS.A;
+% Bmatd = DSYS.B;
+% Cmatd = DSYS.C;
+temp = expm([Amat Bmat;0 0 0]*Ts);
+  Amatd = temp(1:2,1:2);
+    Bmatd = temp(1:2,3);
+        Cmatd = [0 1];
 
 % P = lyap(Amat, Q); Förmodligen onödig
 
