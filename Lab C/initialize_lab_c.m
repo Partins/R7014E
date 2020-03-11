@@ -18,17 +18,12 @@ C =  [  1, 0, 0, 0, 0;
 D = zeros(3);
 
 s = tf('s');
-%tf_sys = ( C*inv(s*eye(5)-A) )*B + D;
+tf_sys = ( C*inv(s*eye(5)-A) )*B + D;
 ss_sys = ss(A, B, C, D);
 ctrb(ss_sys)
-% %%%%%%%% %%%%%%%%
-% k1 = 1;
-% k2 = 
-% k3 = 1;
-% tau1 = 1;
-% tau2 = 1;
-% tau3 = 1;
-% 
-% Gu1 = k1/(tau1*s+1);
-% Gu2 = k2/(tau2.^2+2*xi*tau2*s+1);
-% Gu3 = k3/(tau3*s+1):
+%% RGA - Relative Gain Array
+% Because the A-matrix is singular (det(A) = 0) we use the pseudo inverse,
+% see Def. 8.1 in book.
+
+RGA = A.*pinv(A)';
+
