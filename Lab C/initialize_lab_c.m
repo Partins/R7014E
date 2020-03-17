@@ -51,22 +51,31 @@ end
 s0 = 0;
 
 % Remove the integrating factor cused by u1
-G1 = minreal(([s,0,0;0,1,0;0,0,1])*tf_sys)
-G0 = evalfr(G1,s0);
-RGA = G0.*inv(G0).'
+G1 = minreal(([s,0,0;0,1,0;0,0,1])*tf_sys);
+G0 = evalfr(G1,s0); % Evaluate TFs for s = 0;
+RGA = G0.*inv(G0).'; % RGA equation p.10 in Lec. 12
 
-W1 = G0';
-W2 = eye(size(G0));
 G = tf_sys;
 
-Gtilde = W2*G*W1;
-lambda = 10;
+%Design params
+lambda1 = 1; %0.04
+lambda2 = 0.1;
+lambda3 = 0.1;
+% Remove zeros from G1
+G1 = minreal(G(1,1)/((s-0.657566786259940)));
+G1 = minreal(G1 /(s-0.055347123556317));
+G2 = minreal(G(2,2));
+G3 = minreal(G(3,3));
 
-Q1 = minreal(1/((lambda*s+1)*(lambda*s+1)) * inv(G(1,1))); % n=2
-Q2 = minreal(1/((lambda*s+1)*(lambda*s+1)*(lambda*s+1)) * inv(G(3,2))) %n = 3
-Q3 = minreal(1/((lambda*s+1)*(lambda*s+1)) * inv(G(2,3))); % n=2
+% Form Qs
+Q1 = minreal(1/(lambda1*s+1)^4 * inv(G1)); % n=2
+Q2 = minreal(1/(lambda2*s+1)^1 * inv(G2)); %n = 3 G(3,2)
+Q3 = minreal(1/(lambda3*s+1)^2 * inv(G3)); % n=2 G(2,3)
 
-Gf = (10/s)*G;
+% Feedbacks with zeros removed
+Gf1 = G1 ;
+Gf2 = G2;
+Gf3 = G3;
 
 
 
