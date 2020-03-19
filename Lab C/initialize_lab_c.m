@@ -77,5 +77,17 @@ Gf1 = G1 ;
 Gf2 = G2;
 Gf3 = G3;
 
+%% Kalman
+
+R = 100;
+Q = 100*eye(5);
+[P,K,L] = icare(A,B,Q,R)  % X = P,
+K
+
+
+
+
+
+
 
 
