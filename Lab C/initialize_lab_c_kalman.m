@@ -19,7 +19,7 @@ D = zeros(3);
 
 s = tf('s');
 %tf_sys = (C*inv(s*eye(5)-A))*B + D;
-%ss_sys = ss(A, B, C, D);
+ss_sys = ss(A, B, C, D);
 
 % if rank(ctrb(ss_sys)) ~= 5
 %     disp('Not Controllable')
@@ -29,20 +29,31 @@ s = tf('s');
 % end
 
 %% Kalman
-Vd = 0.1*eye(size(A));
+Vd = .1*eye(size(A));
 Vn = 1*eye(3);
 [Kf, P, E] = lqe(A, Vd, C, Vd, Vn);
-
 %% LQR
-Q = [1 0 0 0 0;
-     0 100 0 0 0;
-     0 0 10 0 0;
-     0 0 0 1 0;
-     0 0 0 0 1]
+Q = [1 0 0;
+     0 1 0;
+     0 0 1]
+Q = [10 0 0 0 0;
+        0 1 0 0 0;
+        0 0 10 0 0;
+        0 0 0 1 0;
+        0 0 0 0 1]
 
-R = 0.1;
+R = 0.01;
 L = lqr(A-Kf*C,B,Q,R)
 %[P,K,L] = icare(A,B,Q,R)  % X = P,
+
+M =[  1, 0, 0, 0, 0;
+        0, 1, 0, 0, 0;
+        0, 0, 1, 0, 0];
+%Lr = pinv((M*inv((B*L-A)))*B)
+Lr = pinv(M*inv(B*L-A)*B)    
+
+
+
 
 
 
