@@ -30,19 +30,20 @@ ss_sys = ss(A, B, C, D);
 
 %% Kalman
 Vd = .1*eye(size(A));
-Vn = 1*eye(3);
-[Kf, P, E] = lqe(A, Vd, C, Vd, Vn);
-%% LQR
-Q = [1 0 0;
-     0 1 0;
-     0 0 1]
-Q = [10 0 0 0 0;
-        0 1 0 0 0;
-        0 0 10 0 0;
-        0 0 0 1 0;
-        0 0 0 0 1]
+Vn = 0.1*eye(3);
 
-R = 0.01;
+[Kf, P, E] = lqe(A, Vd, C, Vd, Vn)
+%[X, Kf, E] = icare(A,B,Vd,Vn)
+%Kf = -Kf'
+%% LQR
+
+Q = [10 0 0 0 0;
+      0 10 0 0 0;
+      0 0 100 0 0;
+      0 0 0 1 0;
+      0 0 0 0 1]
+
+R = 0.09;
 L = lqr(A-Kf*C,B,Q,R)
 %[P,K,L] = icare(A,B,Q,R)  % X = P,
 
