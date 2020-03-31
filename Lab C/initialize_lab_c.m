@@ -20,12 +20,7 @@ D = zeros(3);
 s = tf('s');
 tf_sys = (C*inv(s*eye(5)-A))*B + D;
 ss_sys = ss(A, B, C, D);
-if rank(ctrb(ss_sys)) ~= 5
-    disp('Not Controllable')
-end
-if rank(obsv(ss_sys)) ~= 5
-    disp('Not Observable')
-end
+
 
 %% Disturbances
 % k1 = 1;
@@ -56,35 +51,33 @@ G0 = evalfr(G1,s0); % Evaluate TFs for s = 0;
 RGA = G0.*inv(G0).'; % RGA equation p.10 in Lec. 12
 
 G = tf_sys;
-
 %Design params
-lambda1 = .9; %0.04
-lambda2 = .001;
-lambda3 = .001;
+lambda1 = .7; %0.4
+lambda2 = .1;
+lambda3 = .1;
 % Remove zeros from G1
-G1 = minreal(G(1,1)/((s-0.657566786259940)));
+G1 = minreal(G(1,1)/(s-0.657566786259940));
 G1 = minreal(G1 /(s-0.055347123556317));
-G1 = minreal(G1 /(s+6))
+%G1 = minreal(G(1,1));
 G2 = minreal(G(2,2));
 G3 = minreal(G(3,3));
 
 % Form Qs
-Q1 = minreal(1/(lambda1*s+1)^5 * inv(G1)); % n=2
-Q2 = minreal(1/(lambda2*s+1)^1 * inv(G2)); %n = 3 G(3,2)
-Q3 = minreal(1/(lambda3*s+1)^2 * inv(G3)); % n=2 G(2,3)
+Q1 = minreal((1/(lambda1*s+1)^4 )* inv(G1)); % n=2
+Q2 = minreal((1/(lambda2*s+1)^1 )* inv(G2)); %n = 3 G(3,2)
+Q3 = minreal((1/(lambda3*s+1)^2 )* inv(G3)); % n=2 G(2,3)
 
 % Feedbacks with zeros removed
-Gf1 = G1 ;
-Gf2 = G2;
-Gf3 = G3;
+
+Gf1 = minreal(G1);
+Gf2 = minreal(G2);
+Gf3 = minreal(G3);
+
 
 
 %% Kalman
 
-R = 100;
-Q = 100*eye(5);
-[P,K,L] = icare(A,B,Q,R)  % X = P,
-K
+
 
 
 
