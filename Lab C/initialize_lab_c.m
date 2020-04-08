@@ -43,21 +43,23 @@ ss_sys = ss(A, B, C, D);
 % GU = [Gu1; Gu2; Gu3];
 %% RGA - Relative Gain Array
 % Calculate G(0) where G is the system TF
-s0 = 0;
+s0 = 10;
 
 % Remove the integrating factor cused by u1
 G1 = minreal(([s,0,0;0,1,0;0,0,1])*tf_sys);
-G0 = evalfr(G1,s0); % Evaluate TFs for s = 0;
+G0 = evalfr(G1,0); % Evaluate TFs for s = 0;
 RGA = G0.*inv(G0).'; % RGA equation p.10 in Lec. 12
 
 G = tf_sys;
+
 %Design params
-lambda1 = .7; %0.4
+lambda1 = 1; %0.4
 lambda2 = .1;
 lambda3 = .1;
 % Remove zeros from G1
 G1 = minreal(G(1,1)/(s-0.657566786259940));
 G1 = minreal(G1 /(s-0.055347123556317));
+%G1 = G1*(s+.4);
 %G1 = minreal(G(1,1));
 G2 = minreal(G(2,2));
 G3 = minreal(G(3,3));
@@ -67,16 +69,22 @@ Q1 = minreal((1/(lambda1*s+1)^4 )* inv(G1)); % n=2
 Q2 = minreal((1/(lambda2*s+1)^1 )* inv(G2)); %n = 3 G(3,2)
 Q3 = minreal((1/(lambda3*s+1)^2 )* inv(G3)); % n=2 G(2,3)
 
+Q = [Q1 0 0;
+       0  Q2 0;
+       0   0  Q3]
 % Feedbacks with zeros removed
 
 Gf1 = minreal(G1);
 Gf2 = minreal(G2);
 Gf3 = minreal(G3);
+Gf = [Gf1 0 0;
+       0  Gf2 0;
+       0   0  Gf3]
+
 
 
 
 %% Kalman
-
 
 
 
